@@ -6,6 +6,7 @@ import (
 	"ctjsoft/ginessential/model"
 	"ctjsoft/ginessential/reponse"
 	"ctjsoft/ginessential/util"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -17,10 +18,25 @@ import (
 // Register 注册
 func Register(ctx *gin.Context) {
 	DB := common.GetDB()
+	// 使用 map 获取请求参数
+	// var requestMap = make(map[string]string)
+	// json.NewDecoder(ctx.Request.Body).Decode(&requestMap) // 使用 json 包将请求中 Request.Body 的 json 数据解析到 requestMap
+
+	// 使用结构体来解析请求参数
+	var requestUser = model.User{}
+	// json.NewDecoder(ctx.Request.Body).Decode(&requestUser)
+	ctx.Bind(&requestUser) // gin 框架提供的 Bind 函数
+	// 获取参
+	name := requestUser.Name
+	phone := requestUser.Phone
+	password := requestUser.Password
+
 	// 获取参数
-	name := ctx.PostForm("name")
-	phone := ctx.PostForm("phone")
-	password := ctx.PostForm("password")
+	// name := ctx.PostForm("name")
+	// phone := ctx.PostForm("phone")
+	// password := ctx.PostForm("password")
+
+	fmt.Printf("phone: %v ----- len: %d\n", phone, len(phone))
 	// 数据验证
 	if len(phone) != 11 {
 		reponse.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "手机号必须为 11 位")
@@ -56,12 +72,16 @@ func Register(ctx *gin.Context) {
 	}
 	DB.Create(&newUser)
 
+	// 发放 token
+	token, err := common.ReleaseToken(newUser)
+	if err != nil {
+		reponse.Response(ctx, http.StatusInternalServerError, 500, nil, "系统异常")
+		log.Panicf("token generate error: %v", err)
+		return
+	}
+
 	// 返回结果
-	//ctx.JSON(http.StatusOK, gin.H{
-	//	"code": 200,
-	//	"msg":  "注册成功",
-	//})
-	reponse.Success(ctx, nil, "注册成功")
+	reponse.Success(ctx, gin.H{"token": token}, "注册成功")
 }
 
 // Login 登录

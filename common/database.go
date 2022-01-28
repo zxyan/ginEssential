@@ -3,6 +3,7 @@ package common
 import (
 	"ctjsoft/ginessential/model"
 	"fmt"
+	"github.com/spf13/viper"
 
 	"github.com/jinzhu/gorm"
 )
@@ -11,13 +12,13 @@ var DB *gorm.DB
 
 // 连接数据库
 func InitDB() *gorm.DB {
-	driverName := "mysql"
-	host := "localhost"
-	port := "3306"
-	database := "ginessential"
-	username := "root"
-	password := "root"
-	charset := "utf8"
+	driverName := viper.GetString("datasource.driverName") // "mysql"
+	host := viper.GetString("datasource.host")             // "localhost"
+	port := viper.GetString("datasource.port")             // "3306"
+	database := viper.GetString("datasource.database")     // "ginessential"
+	username := viper.GetString("datasource.username")     // "root"
+	password := viper.GetString("datasource.password")     // "root"
+	charset := viper.GetString("datasource.charset")       // "utf8"
 	args := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
 		username,
 		password,
