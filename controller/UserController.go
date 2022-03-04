@@ -36,7 +36,7 @@ func Register(ctx *gin.Context) {
 	// phone := ctx.PostForm("phone")
 	// password := ctx.PostForm("password")
 
-	fmt.Printf("phone: %v ----- len: %d\n", phone, len(phone))
+	fmt.Printf("phone: %v ----- len: %d\n", phone, len(phone), " ------ requestUser:", requestUser)
 	// 数据验证
 	if len(phone) != 11 {
 		reponse.Response(ctx, http.StatusUnprocessableEntity, 422, nil, "手机号必须为 11 位")
@@ -88,8 +88,16 @@ func Register(ctx *gin.Context) {
 func Login(ctx *gin.Context) {
 	DB := common.GetDB()
 	// 获取参数
-	phone := ctx.PostForm("phone")
-	password := ctx.PostForm("password")
+	// phone := ctx.PostForm("phone")
+	// password := ctx.PostForm("password")
+
+	// 使用结构体来解析请求参数
+	var requestUser = model.User{}
+	// json.NewDecoder(ctx.Request.Body).Decode(&requestUser)
+	ctx.Bind(&requestUser) // gin 框架提供的 Bind 函数
+	// 获取参
+	phone := requestUser.Phone
+	password := requestUser.Password
 
 	// 数据验证
 	if len(phone) != 11 {

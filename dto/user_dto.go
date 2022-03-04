@@ -3,8 +3,8 @@ package dto
 import "ctjsoft/ginessential/model"
 
 type UserDto struct {
-	Name  string `json: "name"`
-	Phone string `json: "phone"`
+	Name  string `json:"name"`
+	Phone string `json:"phone"`
 }
 
 func ToUserDto(user model.User) UserDto {

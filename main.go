@@ -2,7 +2,6 @@ package main
 
 import (
 	"ctjsoft/ginessential/common"
-	"fmt"
 	"github.com/spf13/viper"
 	"os"
 
@@ -32,13 +31,11 @@ func main() {
 
 // InitConfig 读取配置文件
 func InitConfig() {
-	workDir, _ := os.Getwd()                 // 获取当前的工作目录
-	viper.SetConfigName("application")       // 设置读取的文件名
-	viper.SetConfigType("yml")               // 设置读取的文件的类型
-	viper.AddConfigPath(workDir + "/config") // 设置文件的路径
-	fmt.Println("workDir ====== ", workDir)
+	workDir, _ := os.Getwd()                                  // 获取当前的工作目录
+	viper.SetConfigName("application")                        // 设置读取的文件名
+	viper.SetConfigType("yml")                                // 设置读取的文件的类型
+	viper.AddConfigPath(workDir + "/src/ginEssential/config") // 设置文件的路径
 	err := viper.ReadInConfig()
-	fmt.Println("workDir:", workDir)
 	if err != nil {
 		panic(err)
 	}

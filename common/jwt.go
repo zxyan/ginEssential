@@ -14,7 +14,7 @@ type Claims struct {
 	jwt.StandardClaims
 }
 
-// 发放 token
+// ReleaseToken 发放 token
 func ReleaseToken(user model.User) (string, error) {
 	expirationTime := time.Now().Add(7 * 24 * time.Hour) // token 有效期设置为 7 天
 	claims := &Claims{
@@ -36,7 +36,7 @@ func ReleaseToken(user model.User) (string, error) {
 	return tokenString, nil
 }
 
-// 从 tokenString 中解析 Claims, 然后返回
+// ParseToken 从 tokenString 中解析 Claims, 然后返回
 func ParseToken(tokenString string) (*jwt.Token, *Claims, error) {
 	claims := &Claims{}
 
