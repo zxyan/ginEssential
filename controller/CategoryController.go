@@ -27,7 +27,7 @@ func NewCategoryController() ICategoryController {
 	//return CategoryController{DB: db}
 
 	repository := repository.NewCategoryRepository()
-	repository.DB.AutoMigrate(model.Category{})
+	repository.DB.AutoMigrate(&model.Category{})
 	return CategoryController{Repository: repository}
 }
 
